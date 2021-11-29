@@ -1,0 +1,103 @@
+		Day1
+-------------------------------------------------
+		links
+-------------------------------------------------
+----https://github.com/ansible/ansible
+----https://github.com/ansible/ansible-examples
+----https://github.com/geerlingguy/ansible-for-devops
+----https://github.com/ansible/ansible/blob/stable-2.9/contrib/inventory {for dynamic inv examples}
+
+1)  #ansible --verion
+2)  #/usr/lib/python3.6/site-packages/ansible/plugins (imp location)
+3)  control node req
+      	Ansible RPM
+        	Open SSH
+        	Python
+        	winrm 0.3.0 or later version (pywinrm or puthon3-winrm)
+      In Case of SElinux
+       	py2 - libselinux-python
+     	py3 - python3-linselinux-python
+
+	Installation 
+---------------------------------------------------
+4)   #sudo yum list ansible openssh python
+       #sudo yum install ansible
+
+	Inventory
+----------------------------------------------------
+5)   Inventories ttype
+       Static Inventory
+
+       PRE_DEFINED_HOSTS
+       localhost
+
+       PRE_DEFINED_GROUPS
+       all {all host enries *}
+       ungrouped {not the members of any group}
+
+       USER_DEFINED_HOSTS
+       servera.lab.example.com
+	or
+       servera
+	or
+       172.25.250.10
+         or
+       [dev_svrs]
+       test1
+       test2
+
+       [web_svrs]
+       test3
+       test4
+       server[c:d] #range for server a,b,c
+       192.168.0.[10:15] # for ip range
+
+       [linux:children]
+       dev_svrs
+       web_svrs
+
+
+     Dynamic Inventory{script based}
+/etc/ansible/inventory {default locations}
+6)  #ansible '*' --list-hosts {for getting hosts form default location}
+7)  #ansible '*'  --list-hosts -i customInventory  {for displaying custom inventory list}
+8)  #ansible 'dev,servera*'  --list-hosts -i customInventory {for groups and patterns matching}
+9)   #ansible 'dev,servera*'  --list-hosts -i /inventory/ {for getting hosts from inv files in a dir ex /inventory}
+10) # ansible-inventory --list --yaml {default format is json to change fromat use --yaml }
+
+		Configuration file
+--------------------------------------------------------------------------------
+11) /etc/ansible/ansible.cfg {default location for config file}
+       precedence for custom location
+       A) $ANSIBLE_CONFIG = PATH
+       B) CURRENT_DIR (./ansible.cfg)
+       C) HOME_DIR (~/.ansible.cfg) {under home dir it should be hidden file}
+       D) /etc/ansible/ansible.cfg
+12) go to ~/.bashrc ( TO ADD PROFILE VERIABLE)
+       add export ANSIBLE_CONFIG = /usr/ansible.cfg {no spacing between =}
+       # source ~/.bashrc {to effect the changes in bashrc}
+       # echo $ANSIBLE_CONFIG
+13) # ansible-config dump {to get ansible configuration}
+14) # ansible-config dump --only-changed {to get ansible configuration changed}
+
+		Modules
+----------------------------------------------------------------------------------
+15) # /usr/lib/python3.6/site-packages/ansible/modules (defaults location)
+16) # ansible-doc -l {to get list of all modules}
+17) # ansible-doc MODULE
+18) ---- https://docs.ansible.com/ansible/latest/dev_guide/ {for developing guide for module}
+       ---- https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html
+
+		Plugin
+----------------------------------------------------------------------------------
+19) # /usr/lib/python3.6/site-packages/ansible/plugins (defaults location)
+20) # ansible-doc ssh -t connection { to get pluging doc for ssh in connection type}
+21) # ansible-doc -l -t PLUGIN_TYPE
+
+		AD-HOC CMDS
+-----------------------------------------------------------------------------------
+22) # ansible 'HOST-PATTERN' -m MODULE -a ARGS {syntax}
+       # ansible 'all' -m ping
+       # ansible 'all' -m user -a 'name=john state=present'
+
+
