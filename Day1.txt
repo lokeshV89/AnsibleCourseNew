@@ -21,7 +21,7 @@
 	Installation 
 ---------------------------------------------------
 4)   #sudo yum list ansible openssh python
-       #sudo yum install ansible
+     #sudo yum install ansible
 
 	Inventory
 ----------------------------------------------------
@@ -62,7 +62,7 @@
 6)  #ansible '*' --list-hosts {for getting hosts form default location}
 7)  #ansible '*'  --list-hosts -i customInventory  {for displaying custom inventory list}
 8)  #ansible 'dev,servera*'  --list-hosts -i customInventory {for groups and patterns matching}
-9)   #ansible 'dev,servera*'  --list-hosts -i /inventory/ {for getting hosts from inv files in a dir ex /inventory}
+9)  #ansible 'dev,servera*'  --list-hosts -i /inventory/ {for getting hosts from inv files in a dir ex /inventory}
 10) # ansible-inventory --list --yaml {default format is json to change fromat use --yaml }
 
 		Configuration file
@@ -74,9 +74,9 @@
        C) HOME_DIR (~/.ansible.cfg) {under home dir it should be hidden file}
        D) /etc/ansible/ansible.cfg
 12) go to ~/.bashrc ( TO ADD PROFILE VERIABLE)
-       add export ANSIBLE_CONFIG = /usr/ansible.cfg {no spacing between =}
-       # source ~/.bashrc {to effect the changes in bashrc}
-       # echo $ANSIBLE_CONFIG
+    add export ANSIBLE_CONFIG = /usr/ansible.cfg {no spacing between =}
+    # source ~/.bashrc {to effect the changes in bashrc}
+    # echo $ANSIBLE_CONFIG
 13) # ansible-config dump {to get ansible configuration}
 14) # ansible-config dump --only-changed {to get ansible configuration changed}
 
