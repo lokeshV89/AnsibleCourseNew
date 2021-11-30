@@ -78,8 +78,8 @@
 	- name: Configure important user consistently
  	   hosts: servera.lab.example.com
  	   tasks:
- 	   - name: newbie exists with UID 4000
-	      user:
+ 	    - name: newbie exists with UID 4000
+	       user:
  	        name: newbie
                              uid: 4000
  	        state: present
@@ -98,3 +98,100 @@
 11)  # ansible-playbook  --Limit "servera,serverb" demo.yml {to limit to choosed hosts}
         # ansible-playbook  --Limit "!servera" demo.yml {use ! to exclude from play}
         # ansible-playbook  --Limit  @./server_list   demo.yml {to run from a list in proided files}
+12) add keep_remote_file: true to ansible.cfg to not get delete the remote host
+
+
+		Managing Variables
+---------------------------------------------------------------------------------------------------------
+13) precedence of variable
+	a) CLI	# ansible-playbook demo.yml -e 'VAR_NAME=TEST VAR_NAME1=TEST1'  [-e extra var]
+	b) Task Level (Playbook)
+		---
+		- hosts: servera
+		- tasks:
+		   - name: debug task
+		      debug:
+		          msg: "{{test}} {{data}}"
+		      vars:
+		           test: abcd
+		           data: fsadsdf
+		...
+		
+	c) Play Level
+		---
+		- hosts: servera
+		- vars:		#play level vars
+		      - user: testuser
+		      - goup: data
+		- tasks:
+		   - name: debug task
+		      debug:
+		          msg: "{{test}} {{data}}"
+		      vars:
+		           test: abcd
+		           data: fsadsdf
+		  - name: usercreation
+		     user:
+		           name: "{{user}}"
+		           state: present
+		...
+
+-------------------------------------------------------
+		---
+		- hosts: servera
+		- vars_files:
+		     - ./vars.yml
+		     - ./home/test/var.json 
+		- vars_prompt:	# for prompting userinput for var
+		     - name: email
+		        prompt: "enter your email"
+		        private: false	# print on screen
+		        confirm: true	# for user confimation
+		     - name: psed
+		        prompt: "enter your pawssword"	
+		        private: true	# hide on screen
+		        confirm: true	# for user confimation
+		- vars:		# play level vars
+		      - user: testuser
+		      - goup: data
+		- tasks:
+		   - name: debug task
+		      debug:
+		          msg: "{{test}} {{data}}"
+		      vars:
+		           test: abcd
+		           data: fsadsdf
+		  - name: usercreation
+		     user:
+		           name: "{{user}}"
+		           state: present
+		...
+-------------------------------------------------------------
+		example of varible file (var1.yml)
+		---
+		- var1: abc
+		- var2: bfg
+		- var3: fasa
+		...
+
+	d) Host Level [To be changed on inventory level]
+		[dev]
+		servera	host_ip=10.10.10.1	app=Oracle
+		serverb	host_ip=11.12.45.85	app=Apache
+		** Note - Instead of mentioning hostvar in inv file create a directory named as 
+			host_vars and create files with the hostnames and add vars to it
+			ex -  vm host_vars/servera
+			          vm host_vars/serverb
+
+	e) Group Level [To be changed on inventory level]
+		[dev]
+		servera	host_ip=10.10.10.1	app=Oracle
+		serverb	host_ip=11.12.45.85	app=Apache
+
+		[dev:vars]
+		env=DevEnvironment
+		** Note - Instead of mentioning groupvar in inv file create a directory named as 
+			group_vars and create files with the groupname and add vars to it
+			ex -  vm group_vars/dev
+			          
+
