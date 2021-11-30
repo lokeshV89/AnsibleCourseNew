@@ -1,0 +1,100 @@
+		Day2
+-------------------------------------------------------------------
+		links
+-------------------------------------------------------------------
+----https://github.com/ansible/ansible
+
+		PlayBookCreation
+-------------------------------------------------------------------
+1)  # ansible-doc -l {different types of available modules}
+      types-->Non-Idempotent 	Idempotent {type of modules, Always prefer Idompotent modules}
+      	 shell
+	 command
+	 raw
+	 win_shell
+2)  # ansible-doc user {to view documentation and help}
+3)  YAML Syntax
+	Directive
+	-----------
+	--- {Playbook always starts with --- not mendatory}
+	
+	Stirngs
+	--------
+	This is string
+	'This is  string'
+	"this is stirng"
+	"this is \nthe \nstirng"	this is
+				the
+				string
+	|this is			this is {print it as it is usiing | sym}
+	the stirng			the string
+
+	>this is			this is string {> combines}
+	stirng			
+
+	Variables {Dictionary}
+	--------------------------
+	Key: value  [to call vairable use "{{ key }}"]
+	pKey:
+	  cKey: value  [parent child vairable to call use "{{pkey.ckey}}"  or "{{pkey['ckey']}}" ]
+
+	List of items:
+	----------------
+	- item1 [use - to declare list] or [item1, item2, item3]
+	- item2
+	- item3
+
+	List of Dictionaries
+	----------------------
+	- var1: value1    or  - {var1: value1, var2: value2}
+	   var2: value2
+	- var3: value3
+
+3)  Playbook Syntax
+
+	---			#Start of Playbookla
+	- PLAY1: 'HOST_PATTERN'	#Where to execute
+	   TASKS:			#What to exec
+	      - MODULE1:
+		ARG1: VALUE1
+		ARG2: VALUE2
+	       - MODULE2:
+		ARG1: VALUE1
+		ARG2: VALUE2
+
+	- PLAY2: 'HOST_PATTERN'	#Where to execute
+	   TASKS:			#What to exec
+	      - MODULE1:
+		ARG1: VALUE1
+		ARG2: VALUE2
+	       - MODULE2:
+		ARG1: VALUE1
+		ARG2: VALUE2
+	...			#End of Playbook
+
+	Sample Playbook
+	---------------------
+	---
+	- name: Configure important user consistently
+ 	   hosts: servera.lab.example.com
+ 	   tasks:
+ 	   - name: newbie exists with UID 4000
+	      user:
+ 	        name: newbie
+                             uid: 4000
+ 	        state: present
+	...
+
+4)  to open multiple files in vi editor open file then escape : vs /filename
+5)  # ansible-playbook  --syntax-check demo.yml {check the syntax of playbook}
+6)  # ansible-playbook  --check demo.yml {dryrun for the playbook can also use -C}
+7)  # ansible-playbook demo.yml {to run the playbook}
+      # ansible-playbook demo.yml -v {to run the playbook in vorbose mode}
+      # ansible-playbook demo.yml  -vv {to run the playbook in vorbose and line number}
+                                                                      -vvv  & -vvvv { -vvv with connetion detail  & -vvvv for file details }
+8)  # ansible-playbook  --list-task  demo.yml {to see the playbook structure}
+9)  # ansible-playbook  --step demo.yml {to get prompt at each step}
+10)  # ansible-playbook  --start-at-task "TASK_NAME" demo.yml {to see the playbook structure}
+11)  # ansible-playbook  --Limit "servera,serverb" demo.yml {to limit to choosed hosts}
+        # ansible-playbook  --Limit "!servera" demo.yml {use ! to exclude from play}
+        # ansible-playbook  --Limit  @./server_list   demo.yml {to run from a list in proided files}
